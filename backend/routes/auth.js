@@ -6,27 +6,27 @@ const User = require('../models/User');
 
 // Register route
 router.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     
     try {
-        // Check if user already exists
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        // Create a new user instance
-        user = new User({ name, email, password });
+        user = new User({
+            name,
+            email,
+            password,
+            role: role === 'admin' ? 'admin' : 'user' // Default to 'user' if role isn't provided
+        });
 
-        // Hash the password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
-        // Save the user
         await user.save();
 
-        // Generate JWT token
-        const payload = { userId: user.id };
+        const payload = { userId: user.id, role: user.role };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(201).json({ token });
@@ -53,7 +53,7 @@ router.post('/login', async (req, res) => {
         }
 
         // Generate JWT token
-        const payload = { userId: user.id };
+        const payload = { userId: user.id, role: user.role };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.json({ token });

@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Quiz = require('../models/Quiz');
 const { authMiddleware } = require('../middleware/authMiddleware'); // To protect routes
+const { roleMiddleware } = require('../middleware/roleMiddleware');
 
-// Create a quiz (POST /api/quizzes)
-router.post('/', authMiddleware, async (req, res) => {
+// Create a quiz (only accessible to admins)
+router.post('/', authMiddleware, roleMiddleware('admin'), async (req, res) => {
     const { title, description, questions } = req.body;
 
     try {
@@ -12,9 +13,9 @@ router.post('/', authMiddleware, async (req, res) => {
             title,
             description,
             questions,
-            userId: req.user.userId // Grab user ID from token
+            userId: req.user.userId
         });
-        
+
         const savedQuiz = await newQuiz.save();
         res.status(201).json(savedQuiz);
     } catch (error) {

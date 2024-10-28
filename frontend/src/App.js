@@ -8,6 +8,8 @@ import Register from './components/Auth/Register';
 import QuizList from './components/Quiz/QuizList';
 import QuizDetails from './components/Quiz/QuizDetails';
 import CreateQuiz from './components/Quiz/CreateQuiz';
+import AdminDashboard from './pages/AdminDashboard';
+import EditQuiz from './components/Quiz/EditQuiz';
 
 function App() {
     return (
@@ -17,6 +19,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 {/* Protected Routes */}
+                <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                <Route path="/edit-quiz/:id" element={<ProtectedRoute><EditQuiz /></ProtectedRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/create-quiz" element={<ProtectedRoute><CreateQuiz /></ProtectedRoute>} />
                 <Route path="/quizzes" element={<ProtectedRoute><QuizList /></ProtectedRoute>} />

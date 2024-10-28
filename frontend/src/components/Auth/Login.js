@@ -15,6 +15,8 @@ function Login() {
         try {
             const response = await axios.post('http://localhost:5000/api/users/login', formData);
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userRole', response.data.role);
+            localStorage.setItem('userId', response.data.userId);
             navigate('/dashboard');
         } catch (error) {
             console.error('Login failed:', error.response.data.msg);

@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+// Add the user data from local storage or context
+const userRole = localStorage.getItem('userRole');
+const userId = localStorage.getItem('userId');
+
 function QuizList() {
     const [quizzes, setQuizzes] = useState([]);
 
@@ -23,7 +27,13 @@ function QuizList() {
             <ul>
                 {quizzes.map((quiz) => (
                     <li key={quiz._id}>
-                        <Link to={`/quizzes/${quiz._id}`}>{quiz.title}</Link>
+                        {/* different link for user and staff */}
+                        {(userRole === 'staff' || userRole === 'admin') && (
+                            <Link to={`/quizzes/${quiz._id}`}>{quiz.title}</Link>
+                        )}
+                        {(userRole === 'user') && (
+                            <Link to={`/quizzes/take/${quiz._id}`}>{quiz.title}</Link>
+                        )}
                     </li>
                 ))}
             </ul>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 function AdminDashboard() {
     const [users, setUsers] = useState([]);
@@ -19,18 +18,7 @@ function AdminDashboard() {
             }
         };
 
-        // function to fetch all quizzes
-        const fetchQuizzes = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/quizzes');
-                setQuizzes(response.data);
-            } catch (error) {
-                console.error('Error fetching quizzes:', error.response.data.msg);
-            }
-        };
-
         fetchUsers();
-        fetchQuizzes();
     }, []);
 
     // function to update user role
@@ -47,27 +35,30 @@ function AdminDashboard() {
         }
     };
 
-    // Function to delete a quiz
-    const deleteQuiz = async (quizId) => {
-        try {
-            await axios.delete(`http://localhost:5000/api/quizzes/${quizId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            });
-            setQuizzes(quizzes.filter(quiz => quiz._id !== quizId)); // Remove from local state
-            alert('Quiz deleted successfully');
-        } catch (error) {
-            console.error('Error deleting quiz:', error.response.data.error);
-        }
-    };
-
     return (
         <div>
             <h2>Admin Dashboard</h2>
 
-            <ul>
-                <li><Link to="/admin/users">Manage Users</Link></li>
-                <li><Link to="/admin/quizzes">Manage Quizzes</Link></li>
-            </ul>
+            
+            <section>
+                <h3>User Management</h3>
+                <ul>
+                    {users.map(user => (
+                        <li key={user._id}>
+                            {user.name} - {user.role}
+                            <select
+                                value={user.role}
+                                onChange={(e) => updateUserRole(user._id, e.target.value)}
+                            >
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                                <option value="staff">Staff</option>
+                            </select>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+
         </div>
     );
 }

@@ -7,17 +7,6 @@ function AdminDashboard() {
     const [quizzes, setQuizzes] = useState([]);
 
     useEffect(() => {
-        // function to fetch all users
-        const fetchUsers = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/admin/users', {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                });
-                setUsers(response.data);
-            } catch (error) {
-                console.error('Error fetching users:', error.response.data.msg);
-            }
-        };
 
         // function to fetch all quizzes
         const fetchQuizzes = async () => {
@@ -29,23 +18,8 @@ function AdminDashboard() {
             }
         };
 
-        fetchUsers();
         fetchQuizzes();
     }, []);
-
-    // function to update user role
-    const updateUserRole = async (userId, role) => {
-        try {
-            await axios.put(
-                `http://localhost:5000/api/admin/users/${userId}/role`,
-                { role },
-                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-            );
-            alert('User role updated successfully');
-        } catch (error) {
-            console.error('Error updating user role:', error.response.data.msg);
-        }
-    };
 
     // Function to delete a quiz
     const deleteQuiz = async (quizId) => {
@@ -64,10 +38,18 @@ function AdminDashboard() {
         <div>
             <h2>Admin Dashboard</h2>
 
-            <ul>
-                <li><Link to="/admin/users">Manage Users</Link></li>
-                <li><Link to="/admin/quizzes">Manage Quizzes</Link></li>
-            </ul>
+            <section>
+                <h3>Quiz Management</h3>
+                <ul>
+                    {quizzes.map(quiz => (
+                        <li key={quiz._id}>
+                            {quiz.title}
+                            <button onClick={() => deleteQuiz(quiz._id)}>Delete</button>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+
         </div>
     );
 }

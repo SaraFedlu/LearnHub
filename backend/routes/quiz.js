@@ -96,4 +96,35 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.post('/:id/submit', authMiddleware, async (req, res) => {
+    const { answers } = req.body; // User's answers array
+
+    try {
+        const quiz = await Quiz.findById(req.params.id);
+        if (!quiz) {
+            return res.status(404).json({ msg: 'Quiz not found' });
+        }
+
+        // Calculate score
+        let score = 0;
+        quiz.questions.forEach((question, index) => {
+            if (question.correctAnswer === answers[index]) {
+                score++;
+            }
+        });
+
+        // Save progress
+        await Progress.create({
+            userId: req.user.userId,
+            quizId: quiz._id,
+            score,
+            dateTaken: new Date()
+        });
+
+        res.json({ score });
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
 module.exports = router;

@@ -14,6 +14,18 @@ router.get('/users', authMiddleware, roleMiddleware('admin'), async (req, res) =
     }
 });
 
+// Get current user profile
+router.get('/users/me', authMiddleware, async (req, res) => {
+    try {
+        console.log("current user: ", req.user.userId );
+        const user = await User.findById(req.user.userId);
+        if (!user) return res.status(404).json({ msg: 'User not found' });
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
 // Update user role (Admin only)
 router.put('/users/:id/role', authMiddleware, roleMiddleware('admin'), async (req, res) => {
     const { role } = req.body;

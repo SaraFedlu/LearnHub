@@ -17,7 +17,10 @@ function Login() {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userRole', response.data.role);
             localStorage.setItem('userId', response.data.userId);
-            navigate('/dashboard');
+            // Redirect to the appropriate dashboard based on role
+            if (response.data.role === 'admin') navigate('/admin-dashboard');
+            else if (response.data.role === 'staff') navigate('/staff-dashboard');
+            else navigate('/user-dashboard');
         } catch (error) {
             console.error('Login failed:', error.response.data.msg);
         }

@@ -8,6 +8,8 @@ const PORT = process.env.PORT || 5000;
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
 const adminRoutes = require('./routes/admin');
+const userRoutes = require('./routes/users');
+const progressRoutes = require('./routes/progress');
 
 // Connect to the database
 const connectDB = require('./db');
@@ -21,6 +23,12 @@ app.use(cors());
 
 // Admin routes
 app.use('/api/admin', adminRoutes);
+
+// User routes
+app.use('/api/users', userRoutes);
+
+// User progress routes
+app.use('/api/progress', progressRoutes);
 
 // User authentication routes
 app.use('/api/users', authRoutes);

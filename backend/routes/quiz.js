@@ -5,8 +5,12 @@ const { authMiddleware } = require('../middleware/authMiddleware'); // To protec
 const { roleMiddleware } = require('../middleware/roleMiddleware');
 
 // Create a quiz (only accessible to admins)
-router.post('/', authMiddleware, roleMiddleware('admin'), async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
     const { title, description, questions } = req.body;
+
+    if (req.user.role !== 'staff' && req.user.role !== 'admin') {
+        return res.status(403).json({ msg: 'Access denied' });
+    }
 
     try {
         const newQuiz = new Quiz({

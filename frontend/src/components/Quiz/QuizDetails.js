@@ -47,7 +47,7 @@ function QuizDetails() {
             <p>{quiz.description}</p>
 
             {/* Only show the Edit button if the user is the creator or an admin */}
-            {(quiz.userId === userId || userRole === 'admin') && (
+            {(quiz.userId._id === userId || userRole === 'admin') && (
                 <button onClick={() => navigate(`/edit-quiz/${quiz._id}`)}>Edit Quiz</button>
             )}
             

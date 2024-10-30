@@ -9,6 +9,7 @@ router.get('/', authMiddleware, async (req, res) => {
         const progress = await Progress.find({ userId: req.user.userId }).populate('quizId', 'title');
         res.json(progress);
     } catch (error) {
+        console.error('Error fetching progress:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });

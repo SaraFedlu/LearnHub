@@ -9,6 +9,7 @@ function Navigation() {
             <Link to="/profile">Profile</Link>
 
             {role === 'admin' && <Link to="/admin-dashboard">Admin Dashboard</Link>}
+            {role === 'admin' && <Link to="/admin/badge-management">Manage Badges</Link>}
             {role === 'staff' && <Link to="/staff-dashboard">Staff Dashboard</Link>}
             {role === 'user' && <Link to="/user-dashboard">User Dashboard</Link>}
         </nav>

@@ -10,6 +10,7 @@ const quizRoutes = require('./routes/quiz');
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/users');
 const progressRoutes = require('./routes/progress');
+const userBadges = require('./routes/userBadges');
 
 // Connect to the database
 const connectDB = require('./db');
@@ -32,6 +33,9 @@ app.use('/api/progress', progressRoutes);
 
 // User authentication routes
 app.use('/api/users', authRoutes);
+
+// User badge routes
+app.use('/api/user-badges', userBadges);
 
 // Quiz routes
 app.use('/api/quizzes', quizRoutes);

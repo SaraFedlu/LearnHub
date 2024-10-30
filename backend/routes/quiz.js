@@ -1,8 +1,43 @@
 const express = require('express');
 const router = express.Router();
 const Quiz = require('../models/Quiz');
+const Progress = require('../models/Progress');
 const { authMiddleware } = require('../middleware/authMiddleware'); // To protect routes
 const { roleMiddleware } = require('../middleware/roleMiddleware');
+const UserBadge = require('../models/UserBadge');
+const Badge = require('../models/Badge');
+
+// Define criteria checks
+const checkBadgeEligibility = async (userId) => {
+    const completedQuizzes = await Progress.countDocuments({ userId });
+    const highScoreCount = await Progress.countDocuments({ userId, score: { $gte: 2 } });
+
+    const badgesToAward = [];
+
+    // Quiz Master badge: Complete 10 quizzes
+    if (completedQuizzes >= 10) {
+        const badge = await Badge.findOne({ name: 'Quiz Master' });
+        if (badge) {
+            const alreadyAwarded = await UserBadge.findOne({ userId, badgeId: badge._id });
+            if (!alreadyAwarded) badgesToAward.push(badge);
+        }
+        
+    }
+
+    // High Scorer badge: Score 80% or higher on 5 quizzes
+    if (highScoreCount >= 5) {
+        const badge = await Badge.findOne({ name: 'High Scorer' });
+        if (badge) {
+            const alreadyAwarded = await UserBadge.findOne({ userId, badgeId: badge._id });
+            if (!alreadyAwarded) badgesToAward.push(badge);
+        }
+    }
+
+    // Award any earned badges
+    for (const badge of badgesToAward) {
+        await UserBadge.create({ userId, badgeId: badge._id });
+    }
+};
 
 // Create a quiz (only accessible to admins)
 router.post('/', authMiddleware, async (req, res) => {
@@ -23,6 +58,7 @@ router.post('/', authMiddleware, async (req, res) => {
         const savedQuiz = await newQuiz.save();
         res.status(201).json(savedQuiz);
     } catch (error) {
+        console.error('Error creating quiz:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -69,6 +105,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
         await quiz.save();
         res.json({ msg: 'Quiz updated successfully', quiz });
     } catch (error) {
+        console.error('Error in update route:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -79,6 +116,7 @@ router.get('/', async (req, res) => {
         const quizzes = await Quiz.find().populate('userId', 'name');
         res.json(quizzes);
     } catch (error) {
+        console.error('Error in fetch all route:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -92,6 +130,7 @@ router.get('/:id', async (req, res) => {
         }
         res.json(quiz);
     } catch (error) {
+        console.error('Error in fetch route:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -121,8 +160,12 @@ router.post('/:id/submit', authMiddleware, async (req, res) => {
             dateTaken: new Date()
         });
 
+        // Check for badges
+        await checkBadgeEligibility(req.user.userId);
+
         res.json({ score });
     } catch (error) {
+        console.error('Error in submit route:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });

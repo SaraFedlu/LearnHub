@@ -25,7 +25,7 @@ function ProgressTracking() {
             <ul>
                 {progress.map((entry) => (
                     <li key={entry._id}>
-                        Quiz ID: {entry.quizId} - Score: {entry.score} - Date: {new Date(entry.dateTaken).toLocaleDateString()}
+                        Quiz Title: {entry.quizId.title} - Score: {entry.score} - Date: {new Date(entry.dateTaken).toLocaleDateString()}
                     </li>
                 ))}
             </ul>

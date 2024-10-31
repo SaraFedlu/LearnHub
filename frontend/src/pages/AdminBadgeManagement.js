@@ -37,18 +37,23 @@ function AdminBadgeManagement() {
     };
 
     return (
-        <div>
+        <div className="container my-5">
             <h2>Badge Management</h2>
-            <CreateBadge onBadgeCreated={handleBadgeCreated} />
-            <ul>
+            <CreateBadge onBadgeCreated={fetchBadges} />
+            <div className="row">
                 {badges.map(badge => (
-                    <li key={badge._id}>
-                        <img src={badge.icon} alt={badge.name} width="30" height="30" /> {badge.name}
-                        <p>{badge.description}</p>
-                        <button onClick={() => handleDeleteBadge(badge._id)}>Delete</button>
-                    </li>
+                    <div key={badge._id} className="col-md-4 mb-3">
+                        <div className="card p-3">
+                            <img src={badge.icon} alt={badge.name} className="card-img-top" style={{ maxHeight: '50px' }} />
+                            <div className="card-body">
+                                <h5 className="card-title">{badge.name}</h5>
+                                <p className="card-text">{badge.description}</p>
+                            </div>
+                            <button className="btn btn-danger" onClick={() => handleDeleteBadge(badge._id)}>Delete</button>
+                        </div>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }

@@ -10,7 +10,7 @@ const Badge = require('../models/Badge');
 // Define criteria checks
 const checkBadgeEligibility = async (userId) => {
     const completedQuizzes = await Progress.countDocuments({ userId });
-    const highScoreCount = await Progress.countDocuments({ userId, score: { $gte: 2 } });
+    const highScoreCount = await Progress.countDocuments({ userId, score: { $gte: 8 } });
 
     const badgesToAward = [];
 

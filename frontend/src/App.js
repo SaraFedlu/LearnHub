@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import QuizList from './components/Quiz/QuizList';
@@ -17,13 +18,12 @@ import ManageQuiz from './pages/ManageQuiz';
 import AdminBadgeManagement from './pages/AdminBadgeManagement';
 import EditQuiz from './components/Quiz/EditQuiz';
 import Progress from './components/User/ProgressTracking';
-import Navigation from './components/Navigation';
 import TakeQuiz from './components/Quiz/TakeQuiz';
 
 function App() {
     return (
         <Router>
-            <Navigation />
+            <Header />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -38,12 +38,12 @@ function App() {
                 <Route path="/admin/users" element={<ProtectedRoute><ManageUsers /></ProtectedRoute>} />
                 <Route path="/my-progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                 <Route path="/edit-quiz/:id" element={<ProtectedRoute><EditQuiz /></ProtectedRoute>} />
-                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/create-quiz" element={<ProtectedRoute><CreateQuiz /></ProtectedRoute>} />
                 <Route path="/quizzes" element={<ProtectedRoute><QuizList /></ProtectedRoute>} />
                 <Route path="/quizzes/:id" element={<ProtectedRoute><QuizDetails /></ProtectedRoute>} />
                 <Route path="/quizzes/take/:id" element={<ProtectedRoute><TakeQuiz /></ProtectedRoute>} />
             </Routes>
+            <Footer />
         </Router>
     );
 }

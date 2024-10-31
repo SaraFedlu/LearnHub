@@ -11,6 +11,7 @@ router.get('/users', authMiddleware, roleMiddleware('admin'), async (req, res) =
         const users = await User.find().select('-password'); // Exclude password
         res.json(users);
     } catch (error) {
+        console.error('Error getting users:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -28,6 +29,7 @@ router.put('/users/:id/role', authMiddleware, roleMiddleware('admin'), async (re
 
         res.json({ msg: 'User role updated', user });
     } catch (error) {
+        console.error('Error updating role:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -41,6 +43,7 @@ router.post('/badges', authMiddleware, roleMiddleware('admin'), async (req, res)
         await newBadge.save();
         res.status(201).json(newBadge);
     } catch (error) {
+        console.error('Error creating badge:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -51,6 +54,7 @@ router.get('/badges', authMiddleware, roleMiddleware('admin'), async (req, res) 
         const badges = await Badge.find();
         res.json(badges);
     } catch (error) {
+        console.error('Error fetching badges:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });
@@ -61,9 +65,10 @@ router.delete('/badges/:id', authMiddleware, roleMiddleware('admin'), async (req
         const badge = await Badge.findById(req.params.id);
         if (!badge) return res.status(404).json({ msg: 'Badge not found' });
 
-        await badge.remove();
+        await badge.findByIdAndDelete(req.params.id);
         res.json({ msg: 'Badge deleted' });
     } catch (error) {
+        console.error('Error deleting badge:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 });

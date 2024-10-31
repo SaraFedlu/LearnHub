@@ -33,41 +33,32 @@ function AdminDashboard() {
         fetchQuizzes();
     }, []);
 
-    // function to update user role
-    const updateUserRole = async (userId, role) => {
-        try {
-            await axios.put(
-                `http://localhost:5000/api/admin/users/${userId}/role`,
-                { role },
-                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-            );
-            alert('User role updated successfully');
-        } catch (error) {
-            console.error('Error updating user role:', error.response.data.msg);
-        }
-    };
-
-    // Function to delete a quiz
-    const deleteQuiz = async (quizId) => {
-        try {
-            await axios.delete(`http://localhost:5000/api/quizzes/${quizId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            });
-            setQuizzes(quizzes.filter(quiz => quiz._id !== quizId)); // Remove from local state
-            alert('Quiz deleted successfully');
-        } catch (error) {
-            console.error('Error deleting quiz:', error.response.data.error);
-        }
-    };
-
     return (
-        <div>
-            <h2>Admin Dashboard</h2>
-
-            <ul>
-                <li><Link to="/admin/users">Manage Users</Link></li>
-                <li><Link to="/admin/quizzes">Manage Quizzes</Link></li>
-            </ul>
+        <div className="container my-5">
+            <h2 className="mb-4">Admin Dashboard</h2>
+            <div className="row">
+                <div className="col-md-6 mb-3">
+                    <div className="card p-3">
+                        <h5>Manage Users</h5>
+                        <p>View and manage all users registered on the platform.</p>
+                        <Link to="/admin/users" className="btn btn-primary">Go to Users</Link>
+                    </div>
+                </div>
+                <div className="col-md-6 mb-3">
+                    <div className="card p-3">
+                        <h5>Manage Quizzes</h5>
+                        <p>View, edit, and delete quizzes created by users.</p>
+                        <Link to="/admin/quizzes" className="btn btn-primary">Go to Quizzes</Link>
+                    </div>
+                </div>
+                <div className="col-md-6 mb-3">
+                    <div className="card p-3">
+                        <h5>Manage Badges</h5>
+                        <p>Create and manage badges for achievements.</p>
+                        <Link to="/admin/badge-management" className="btn btn-primary">Go to Badges</Link>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

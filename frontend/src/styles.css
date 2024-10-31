@@ -1,34 +1,44 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
+/* styles.css */
 
-h1, h2 {
-    color: #333;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    margin: 20px auto;
-}
-
-input {
-    margin: 10px 0;
-    padding: 8px;
-}
-
+/* Adjusted button and input styles */
 button {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: #fff;
-    padding: 10px;
     border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: var(--accent-color);
+}
+
+input, textarea, select {
+    font-size: 1rem;
+    padding: 10px;
+    margin: 8px 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* For card shadows */
+.card {
+    border: none;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+    margin-top: 2rem;
+}
+
+.card:hover {
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
 }

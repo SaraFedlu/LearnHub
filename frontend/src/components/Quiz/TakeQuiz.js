@@ -47,35 +47,41 @@ function TakeQuiz() {
     if (!quiz) return <p>Loading quiz...</p>;
 
     return (
-        <div>
-            <h2>{quiz.title}</h2>
-            <p>{quiz.description}</p>
-
-            {!submitted ? (
-                <form onSubmit={handleSubmit}>
-                    {quiz.questions.map((question, index) => (
-                        <div key={index}>
-                            <h4>{question.question}</h4>
-                            {question.options.map((option, optIndex) => (
-                                <label key={optIndex}>
-                                    <input
-                                        type="radio"
-                                        name={`question-${index}`}
-                                        value={option}
-                                        checked={answers[index] === option}
-                                        onChange={() => handleAnswerChange(index, option)}
-                                    />
-                                    {option}
-                                </label>
-                            ))}
-                        </div>
-                    ))}
-                    <button type="submit">Submit Quiz</button>
-                </form>
-            ) : (
+        <div className="container my-5">
+            {quiz && (
                 <div>
-                    <h3>Your Score: {score} / {quiz.questions.length}</h3>
-                    <button onClick={() => navigate('/user-dashboard')}>Back to Dashboard</button>
+                    <h2>{quiz.title}</h2>
+                    <p className="text-muted">{quiz.description}</p>
+
+                    {!submitted ? (
+                        <form onSubmit={handleSubmit}>
+                            {quiz.questions.map((question, index) => (
+                                <div key={index} className="mb-4">
+                                    <h5>{question.question}</h5>
+                                    {question.options.map((option, optIndex) => (
+                                        <div key={optIndex} className="form-check">
+                                            <input
+                                                type="radio"
+                                                className="form-check-input"
+                                                name={`question-${index}`}
+                                                value={option}
+                                                checked={answers[index] === option}
+                                                onChange={() => handleAnswerChange(index, option)}
+                                            />
+                                            <label className="form-check-label">{option}</label>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                            <button type="submit" className="btn btn-success">Submit Quiz</button>
+                        </form>
+                    ) : (
+                        <div>
+                            <h4>Your Score: {score} / {quiz.questions.length}</h4>
+                            <button onClick={() => navigate('/user-dashboard')}>Back to Dashboard</button>
+
+                        </div>
+                    )}
                 </div>
             )}
         </div>

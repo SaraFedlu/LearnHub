@@ -1,13 +1,15 @@
+// TakeQuiz.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Card, CardBody, CardTitle, Button, Form, FormGroup, Label, Input, Col, Row } from 'reactstrap';
 
 function TakeQuiz() {
-    const { id } = useParams(); // Get quiz ID from URL
-    const [quiz, setQuiz] = useState(null); // Quiz data
-    const [answers, setAnswers] = useState([]); // User answers
-    const [submitted, setSubmitted] = useState(false); // Submission state
-    const [score, setScore] = useState(null); // Quiz score after submission
+    const { id } = useParams();
+    const [quiz, setQuiz] = useState(null);
+    const [answers, setAnswers] = useState([]);
+    const [submitted, setSubmitted] = useState(false);
+    const [score, setScore] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,7 +17,7 @@ function TakeQuiz() {
             try {
                 const response = await axios.get(`http://localhost:5000/api/quizzes/${id}`);
                 setQuiz(response.data);
-                setAnswers(new Array(response.data.questions.length).fill("")); // Initialize answers array
+                setAnswers(new Array(response.data.questions.length).fill("")); // Initialize empty answers
             } catch (error) {
                 console.error('Error fetching quiz:', error.response ? error.response.data.msg : error.message);
             }
@@ -33,12 +35,13 @@ function TakeQuiz() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:5000/api/quizzes/${id}/submit`, 
+            const response = await axios.post(
+                `http://localhost:5000/api/quizzes/${id}/submit`, 
                 { answers },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );
-            setScore(response.data.score); // Set score from the response
-            setSubmitted(true); // Mark quiz as submitted
+            setScore(response.data.score); // Set score from response
+            setSubmitted(true);
         } catch (error) {
             console.error('Error submitting quiz:', error.response ? error.response.data.msg : error.message);
         }
@@ -48,42 +51,50 @@ function TakeQuiz() {
 
     return (
         <div className="container my-5">
-            {quiz && (
-                <div>
-                    <h2>{quiz.title}</h2>
-                    <p className="text-muted">{quiz.description}</p>
+            <Card className="shadow-lg">
+                <CardBody>
+                    <CardTitle tag="h2" className="text-center mb-4">{quiz.title}</CardTitle>
+                    <p className="text-muted text-center mb-4">{quiz.description}</p>
 
                     {!submitted ? (
-                        <form onSubmit={handleSubmit}>
+                        <Form onSubmit={handleSubmit}>
                             {quiz.questions.map((question, index) => (
-                                <div key={index} className="mb-4">
-                                    <h5>{question.question}</h5>
-                                    {question.options.map((option, optIndex) => (
-                                        <div key={optIndex} className="form-check">
-                                            <input
-                                                type="radio"
-                                                className="form-check-input"
-                                                name={`question-${index}`}
-                                                value={option}
-                                                checked={answers[index] === option}
-                                                onChange={() => handleAnswerChange(index, option)}
-                                            />
-                                            <label className="form-check-label">{option}</label>
-                                        </div>
-                                    ))}
-                                </div>
+                                <Card key={index} className="mb-3 shadow-sm">
+                                    <CardBody>
+                                        <CardTitle tag="h5">Question {index + 1}</CardTitle>
+                                        <p>{question.question}</p>
+                                        <FormGroup>
+                                            {question.options.map((option, optIndex) => (
+                                                <div key={optIndex} className="form-check">
+                                                    <Input
+                                                        type="radio"
+                                                        name={`question-${index}`}
+                                                        value={option}
+                                                        checked={answers[index] === option}
+                                                        onChange={() => handleAnswerChange(index, option)}
+                                                        className="form-check-input"
+                                                    />
+                                                    <Label className="form-check-label">{option}</Label>
+                                                </div>
+                                            ))}
+                                        </FormGroup>
+                                    </CardBody>
+                                </Card>
                             ))}
-                            <button type="submit" className="btn btn-success">Submit Quiz</button>
-                        </form>
+                            <Button type="submit" color="success" block className="mt-4">
+                                Submit Quiz
+                            </Button>
+                        </Form>
                     ) : (
-                        <div>
+                        <div className="text-center">
                             <h4>Your Score: {score} / {quiz.questions.length}</h4>
-                            <button onClick={() => navigate('/user-dashboard')}>Back to Dashboard</button>
-
+                            <Button color="primary" onClick={() => navigate('/user-dashboard')} className="mt-3">
+                                Back to Dashboard
+                            </Button>
                         </div>
                     )}
-                </div>
-            )}
+                </CardBody>
+            </Card>
         </div>
     );
 }

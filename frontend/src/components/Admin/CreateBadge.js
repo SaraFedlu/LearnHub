@@ -1,5 +1,7 @@
+// CreateBadge.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
 function CreateBadge({ onBadgeCreated }) {
     const [formData, setFormData] = useState({
@@ -28,41 +30,63 @@ function CreateBadge({ onBadgeCreated }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h3>Create New Badge</h3>
-            <input
-                type="text"
-                name="name"
-                placeholder="Badge Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-            />
-            <input
-                type="text"
-                name="description"
-                placeholder="Description"
-                value={formData.description}
-                onChange={handleChange}
-                required
-            />
-            <input
-                type="text"
-                name="criteria"
-                placeholder="Criteria (e.g., Complete 10 quizzes)"
-                value={formData.criteria}
-                onChange={handleChange}
-                required
-            />
-            <input
-                type="text"
-                name="icon"
-                placeholder="Icon URL"
-                value={formData.icon}
-                onChange={handleChange}
-            />
-            <button type="submit">Create Badge</button>
-        </form>
+        <Card className="shadow-sm mb-4">
+            <CardBody>
+                <CardTitle tag="h3" className="mb-4 text-center">Create New Badge</CardTitle>
+                <Form onSubmit={handleSubmit}>
+                    <FormGroup>
+                        <Label for="name">Badge Name</Label>
+                        <Input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter badge name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="description">Description</Label>
+                        <Input
+                            type="text"
+                            id="description"
+                            name="description"
+                            placeholder="Enter badge description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="criteria">Criteria</Label>
+                        <Input
+                            type="text"
+                            id="criteria"
+                            name="criteria"
+                            placeholder="e.g., Complete 10 quizzes"
+                            value={formData.criteria}
+                            onChange={handleChange}
+                            required
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for="icon">Icon URL</Label>
+                        <Input
+                            type="text"
+                            id="icon"
+                            name="icon"
+                            placeholder="Enter URL for badge icon"
+                            value={formData.icon}
+                            onChange={handleChange}
+                        />
+                    </FormGroup>
+                    <Button type="submit" color="primary" block>
+                        Create Badge
+                    </Button>
+                </Form>
+            </CardBody>
+        </Card>
     );
 }
 

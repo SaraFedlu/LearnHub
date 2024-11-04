@@ -1,13 +1,14 @@
+// AdminDashboard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Card, CardBody, CardTitle, CardText, Button, Row, Col } from 'reactstrap';
 
 function AdminDashboard() {
     const [users, setUsers] = useState([]);
     const [quizzes, setQuizzes] = useState([]);
 
     useEffect(() => {
-        // function to fetch all users
         const fetchUsers = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/admin/users', {
@@ -15,17 +16,16 @@ function AdminDashboard() {
                 });
                 setUsers(response.data);
             } catch (error) {
-                console.error('Error fetching users:', error.response.data.msg);
+                console.error('Error fetching users:', error.response?.data?.msg || error.message);
             }
         };
 
-        // function to fetch all quizzes
         const fetchQuizzes = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/quizzes');
                 setQuizzes(response.data);
             } catch (error) {
-                console.error('Error fetching quizzes:', error.response.data.msg);
+                console.error('Error fetching quizzes:', error.response?.data?.msg || error.message);
             }
         };
 
@@ -35,30 +35,42 @@ function AdminDashboard() {
 
     return (
         <div className="container my-5">
-            <h2 className="mb-4">Admin Dashboard</h2>
-            <div className="row">
-                <div className="col-md-6 mb-3">
-                    <div className="card p-3">
-                        <h5>Manage Users</h5>
-                        <p>View and manage all users registered on the platform.</p>
-                        <Link to="/admin/users" className="btn btn-primary">Go to Users</Link>
-                    </div>
-                </div>
-                <div className="col-md-6 mb-3">
-                    <div className="card p-3">
-                        <h5>Manage Quizzes</h5>
-                        <p>View, edit, and delete quizzes created by users.</p>
-                        <Link to="/admin/quizzes" className="btn btn-primary">Go to Quizzes</Link>
-                    </div>
-                </div>
-                <div className="col-md-6 mb-3">
-                    <div className="card p-3">
-                        <h5>Manage Badges</h5>
-                        <p>Create and manage badges for achievements.</p>
-                        <Link to="/admin/badge-management" className="btn btn-primary">Go to Badges</Link>
-                    </div>
-                </div>
-            </div>
+            <h2 className="text-center mb-4">Admin Dashboard</h2>
+            <Row>
+                <Col md="6" lg="4" className="mb-4">
+                    <Card className="shadow-sm h-100">
+                        <CardBody className="text-center">
+                            <CardTitle tag="h5">Manage Users</CardTitle>
+                            <CardText>View and manage all users registered on the platform.</CardText>
+                            <Button color="primary" tag={Link} to="/admin/users">
+                                Go to Users
+                            </Button>
+                        </CardBody>
+                    </Card>
+                </Col>
+                <Col md="6" lg="4" className="mb-4">
+                    <Card className="shadow-sm h-100">
+                        <CardBody className="text-center">
+                            <CardTitle tag="h5">Manage Quizzes</CardTitle>
+                            <CardText>View, edit, and delete quizzes created by users.</CardText>
+                            <Button color="primary" tag={Link} to="/admin/quizzes">
+                                Go to Quizzes
+                            </Button>
+                        </CardBody>
+                    </Card>
+                </Col>
+                <Col md="6" lg="4" className="mb-4">
+                    <Card className="shadow-sm h-100">
+                        <CardBody className="text-center">
+                            <CardTitle tag="h5">Manage Badges</CardTitle>
+                            <CardText>Create and manage badges for achievements.</CardText>
+                            <Button color="primary" tag={Link} to="/admin/badge-management">
+                                Go to Badges
+                            </Button>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
         </div>
     );
 }

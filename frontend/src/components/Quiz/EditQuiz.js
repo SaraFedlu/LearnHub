@@ -1,25 +1,25 @@
+// EditQuiz.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Card, CardBody, CardTitle, Button, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 
 function EditQuiz() {
-    const { id } = useParams(); // Get the quiz ID from the URL
+    const { id } = useParams();
     const navigate = useNavigate();
     const [quizData, setQuizData] = useState({
         title: '',
         description: '',
-        questions: [
-            { question: '', options: ['', '', '', ''], correctAnswer: '' }
-        ]
+        questions: [{ question: '', options: ['', '', '', ''], correctAnswer: '' }]
     });
 
     useEffect(() => {
         const fetchQuiz = async () => {
             try {
                 const response = await axios.get(`http://localhost:5000/api/quizzes/${id}`);
-                setQuizData(response.data); // Set the quiz data
+                setQuizData(response.data);
             } catch (error) {
-                console.error('Error fetching quiz:', error.response.data.msg);
+                console.error('Error fetching quiz:', error.response?.data?.msg || error.message);
             }
         };
 
@@ -46,10 +46,7 @@ function EditQuiz() {
     const addQuestion = () => {
         setQuizData({
             ...quizData,
-            questions: [
-                ...quizData.questions,
-                { question: '', options: ['', '', '', ''], correctAnswer: '' }
-            ]
+            questions: [...quizData.questions, { question: '', options: ['', '', '', ''], correctAnswer: '' }]
         });
     };
 
@@ -60,60 +57,97 @@ function EditQuiz() {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             alert('Quiz updated successfully');
-            navigate(`/quizzes/${id}`); // Redirect to Quiz Details page
+            navigate(`/quizzes/${id}`);
         } catch (error) {
-            console.error('Error updating quiz:', error.response.data.msg);
+            console.error('Error updating quiz:', error.response?.data?.msg || error.message);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Edit Quiz</h2>
-            <input
-                name="title"
-                placeholder="Quiz Title"
-                value={quizData.title}
-                onChange={handleChange}
-            />
-            <input
-                name="description"
-                placeholder="Quiz Description"
-                value={quizData.description}
-                onChange={handleChange}
-            />
+        <div className="container my-5">
+            <Card className="shadow-lg">
+                <CardBody>
+                    <CardTitle tag="h2" className="text-center mb-4">Edit Quiz</CardTitle>
+                    <Form onSubmit={handleSubmit}>
+                        <FormGroup>
+                            <Label for="title">Quiz Title</Label>
+                            <Input
+                                id="title"
+                                name="title"
+                                placeholder="Enter quiz title"
+                                value={quizData.title}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="description">Quiz Description</Label>
+                            <Input
+                                id="description"
+                                name="description"
+                                placeholder="Enter quiz description"
+                                value={quizData.description}
+                                onChange={handleChange}
+                                required
+                            />
+                        </FormGroup>
 
-            {quizData.questions.map((q, qIndex) => (
-                <div key={qIndex}>
-                    <h4>Question {qIndex + 1}</h4>
-                    <input
-                        type="text"
-                        placeholder="Question Text"
-                        value={q.question}
-                        onChange={(e) => handleQuestionChange(qIndex, 'question', e.target.value)}
-                    />
-                    
-                    {q.options.map((opt, optIndex) => (
-                        <input
-                            key={optIndex}
-                            type="text"
-                            placeholder={`Option ${optIndex + 1}`}
-                            value={opt}
-                            onChange={(e) => handleOptionChange(qIndex, optIndex, e.target.value)}
-                        />
-                    ))}
-                    
-                    <input
-                        type="text"
-                        placeholder="Correct Answer"
-                        value={q.correctAnswer}
-                        onChange={(e) => handleQuestionChange(qIndex, 'correctAnswer', e.target.value)}
-                    />
-                </div>
-            ))}
+                        {quizData.questions.map((question, qIndex) => (
+                            <Card className="mb-4 shadow-sm" key={qIndex}>
+                                <CardBody>
+                                    <CardTitle tag="h5">Question {qIndex + 1}</CardTitle>
+                                    <FormGroup>
+                                        <Label>Question Text</Label>
+                                        <Input
+                                            type="text"
+                                            placeholder="Enter question"
+                                            value={question.question}
+                                            onChange={(e) => handleQuestionChange(qIndex, 'question', e.target.value)}
+                                            required
+                                        />
+                                    </FormGroup>
 
-            <button type="button" onClick={addQuestion}>Add Question</button>
-            <button type="submit">Save Changes</button>
-        </form>
+                                    <Row>
+                                        {question.options.map((option, optIndex) => (
+                                            <Col xs="6" key={optIndex}>
+                                                <FormGroup>
+                                                    <Label>Option {optIndex + 1}</Label>
+                                                    <Input
+                                                        type="text"
+                                                        placeholder={`Option ${optIndex + 1}`}
+                                                        value={option}
+                                                        onChange={(e) => handleOptionChange(qIndex, optIndex, e.target.value)}
+                                                        required
+                                                    />
+                                                </FormGroup>
+                                            </Col>
+                                        ))}
+                                    </Row>
+
+                                    <FormGroup>
+                                        <Label>Correct Answer</Label>
+                                        <Input
+                                            type="text"
+                                            placeholder="Enter correct answer"
+                                            value={question.correctAnswer}
+                                            onChange={(e) => handleQuestionChange(qIndex, 'correctAnswer', e.target.value)}
+                                            required
+                                        />
+                                    </FormGroup>
+                                </CardBody>
+                            </Card>
+                        ))}
+
+                        <Button type="button" color="secondary" onClick={addQuestion} className="mb-4">
+                            Add Question
+                        </Button>
+                        <Button type="submit" color="primary" block>
+                            Save Changes
+                        </Button>
+                    </Form>
+                </CardBody>
+            </Card>
+        </div>
     );
 }
 

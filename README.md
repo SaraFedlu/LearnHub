@@ -171,4 +171,4 @@ Contributions are welcome! If you would like to contribute:
 For further information or questions about this project, please contact:
 - **Name**: Sara Fedlu
 - **Email**: sfedlu28@gmail.com
-- **GitHub**: [\[GitHub Profile URL\]](https://github.com/SaraFedlu)
+- **GitHub**: [Sara Fedlu](https://github.com/SaraFedlu)

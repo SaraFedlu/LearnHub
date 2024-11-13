@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, CardBody, CardTitle, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardBody, CardTitle, Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 
 function UserProfile() {
     const [userData, setUserData] = useState(null);
     const [badges, setBadges] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -45,6 +47,9 @@ function UserProfile() {
                             <p><strong>Name:</strong> {userData.name}</p>
                             <p><strong>Email:</strong> {userData.email}</p>
                             <p><strong>Role:</strong> {userData.role}</p>
+                            <Button color="secondary" onClick={() => navigate('/profile/edit')}>
+                                Edit Profile
+                            </Button>
                         </CardBody>
                     </Card>
                 </Col>

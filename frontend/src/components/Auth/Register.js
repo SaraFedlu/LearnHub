@@ -16,7 +16,7 @@ import {
 } from 'reactstrap';
 
 function Register() {
-    const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+    const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
     const navigate = useNavigate();
     const [error, setError] = useState(null);
 
@@ -27,8 +27,12 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null); // Reset any previous errors
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
         try {
-            await axios.post('http://localhost:5000/api/users/register', formData);
+            await axios.post('http://localhost:5000/api/auth/register', formData);
             navigate('/login');
         } catch (error) {
             setError(error.response?.data?.msg || 'Registration failed. Please try again.');
@@ -76,6 +80,17 @@ function Register() {
                                     placeholder="Enter your password"
                                     onChange={handleChange}
                                     value={formData.password}
+                                    required
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="confirmPassword">Confirm Password</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type="password"
+                                    onChange={handleChange}
+                                    value={formData.confirmPassword}
                                     required
                                 />
                             </FormGroup>

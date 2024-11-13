@@ -111,7 +111,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
 });
 
 // Get all quizzes (GET /api/quizzes)
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
     try {
         const quizzes = await Quiz.find().populate('userId', 'name');
         res.json(quizzes);
@@ -122,7 +122,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get a specific quiz by ID (GET /api/quizzes/:id)
-router.get('/:id', async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => {
     try {
         const quiz = await Quiz.findById(req.params.id).populate('userId', 'name');
         if (!quiz) {

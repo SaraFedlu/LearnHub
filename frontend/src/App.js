@@ -18,6 +18,7 @@ import ManageQuiz from './pages/ManageQuiz';
 import AdminBadgeManagement from './pages/AdminBadgeManagement';
 import EditQuiz from './components/Quiz/EditQuiz';
 import Progress from './components/User/ProgressTracking';
+import UpdateProfile from './components/User/Profile';
 import TakeQuiz from './components/Quiz/TakeQuiz';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/staff-dashboard" element={<ProtectedRoute><StaffDashboard /></ProtectedRoute>} />
                 <Route path="/user-dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                <Route path="/profile/edit" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
                 <Route path="/admin/quizzes" element={<ProtectedRoute><ManageQuiz /></ProtectedRoute>} />
                 <Route path="/admin/badge-management" element={<ProtectedRoute><AdminBadgeManagement /></ProtectedRoute>} />
                 <Route path="/admin/users" element={<ProtectedRoute><ManageUsers /></ProtectedRoute>} />

@@ -8,11 +8,15 @@ const userRole = localStorage.getItem('userRole');
 
 function QuizList() {
     const [quizzes, setQuizzes] = useState([]);
+    const [userRole, setUserRole] = useState('');
 
     useEffect(() => {
+        setUserRole(localStorage.getItem('userRole'));
         const fetchQuizzes = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/quizzes');
+                const response = await axios.get('http://localhost:5000/api/quizzes', {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
                 setQuizzes(response.data);
             } catch (error) {
                 console.error('Error fetching quizzes:', error.response ? error.response.data.msg : error.message);
@@ -31,9 +35,9 @@ function QuizList() {
                             <CardBody>
                                 <CardTitle tag="h5">{quiz.title}</CardTitle>
                                 <CardText className="text-muted">{quiz.description}</CardText>
-                                <Link to={userRole === 'user' ? `/quizzes/take/${quiz._id}` : `/quizzes/${quiz._id}`}>
+                                <Link to={(userRole === 'user' ? `/quizzes/take/${quiz._id}` : `/quizzes/${quiz._id}`)}>
                                     <Button color="primary" block>
-                                        {userRole === 'user' ? 'Take Quiz' : 'View Quiz'}
+                                        {(userRole === 'user' ? 'Take Quiz' : 'View Quiz')}
                                     </Button>
                                 </Link>
                             </CardBody>

@@ -32,7 +32,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/progress', progressRoutes);
 
 // User authentication routes
-app.use('/api/users', authRoutes);
+app.use('/api/auth/', authRoutes);
+
+// File upload route
+app.use('/uploads', express.static('uploads'));
 
 // User badge routes
 app.use('/api/user-badges', userBadges);

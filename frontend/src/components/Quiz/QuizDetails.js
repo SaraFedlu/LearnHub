@@ -16,7 +16,9 @@ function QuizDetails() {
     useEffect(() => {
         const fetchQuiz = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/quizzes/${id}`);
+                const response = await axios.get(`http://localhost:5000/api/quizzes/${id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
                 setQuiz(response.data);
             } catch (error) {
                 console.error('Error fetching quiz:', error.response ? error.response.data.msg : error.message);

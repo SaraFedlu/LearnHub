@@ -9,7 +9,9 @@ function ManageQuiz() {
     useEffect(() => {
         const fetchQuizzes = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/quizzes');
+                const response = await axios.get('http://localhost:5000/api/quizzes/', {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
                 setQuizzes(response.data);
             } catch (error) {
                 console.error('Error fetching quizzes:', error.response?.data?.msg || error.message);
@@ -20,15 +22,18 @@ function ManageQuiz() {
     }, []);
 
     const deleteQuiz = async (quizId) => {
-        try {
-            await axios.delete(`http://localhost:5000/api/quizzes/${quizId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            });
-            setQuizzes(quizzes.filter(quiz => quiz._id !== quizId));
-            alert('Quiz deleted successfully');
-        } catch (error) {
-            console.error('Error deleting quiz:', error.response?.data?.msg || error.message);
+        if (window.confirm("Are you sure?")) {
+            try {
+                await axios.delete(`http://localhost:5000/api/quizzes/${quizId}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                });
+                setQuizzes(quizzes.filter(quiz => quiz._id !== quizId));
+                alert('Quiz deleted successfully');
+            } catch (error) {
+                console.error('Error deleting quiz:', error.response?.data?.msg || error.message);
+            }
         }
+        
     };
 
     return (

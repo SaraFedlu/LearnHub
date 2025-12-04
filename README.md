@@ -2,6 +2,8 @@
 
 QuizPlatform is a web application that allows users to take quizzes, track their progress, and earn badges for achievements. The platform provides different roles: admin, staff (quiz creators), and regular users, each with their specific dashboards and functionalities.
 
+For Video demonstration [Click Here.](https://www.loom.com/share/cfec8c397e044962bc31cd2c9d99ae3c)
+
 ## Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
